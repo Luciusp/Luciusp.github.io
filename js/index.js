@@ -59,14 +59,13 @@ const autoCompletejs = new autoComplete({
     document.querySelector("#autoComplete_results_list").appendChild(result);
   },
   onSelection: function (feedback) {
-    const key = feedback.selection.value.check;
-    const value = feedback.selection.value.roll;
+    const selection = feedback.selection.value.roll;
     // Render selected choice to selection div
     document.querySelector(".selection").innerHTML = selection;
     // Clear Input
     document.querySelector("#autoComplete").value = "";
     // Change placeholder with the selected value
-    document.querySelector("#autoComplete").setAttribute("placeholder", key);
+    document.querySelector("#autoComplete").setAttribute("placeholder", selection);
     // Concole log autoComplete data feedback
     console.log(feedback);
   },
