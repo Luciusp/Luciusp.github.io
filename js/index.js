@@ -16,7 +16,7 @@ const autoCompletejs = new autoComplete({
       // Returns Fetched data
       return data;
     },
-    key: ["food", "cities", "animals"],
+    key: ["check", "roll"],
   },
   sort: function (a, b) {
     if (a.match < b.match) {
@@ -62,7 +62,7 @@ const autoCompletejs = new autoComplete({
     document.querySelector("#autoComplete_results_list").appendChild(result);
   },
   onSelection: function (feedback) {
-    const selection = feedback.selection.value.food;
+    const selection = feedback.selection.value.check;
     // Render selected choice to selection div
     document.querySelector(".selection").innerHTML = selection;
     // Clear Input
