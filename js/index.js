@@ -28,11 +28,8 @@ const autoCompletejs = new autoComplete({
     return 0;
   },
   query: {
-    manipulate: function (query) {
-      return query.replace("@pizza", "burger");
-    },
   },
-  placeHolder: "Food & Drinks",
+  placeHolder: "Checks",
   selector: "#autoComplete",
   threshold: 0,
   debounce: 0,
@@ -62,7 +59,7 @@ const autoCompletejs = new autoComplete({
     document.querySelector("#autoComplete_results_list").appendChild(result);
   },
   onSelection: function (feedback) {
-    const selection = feedback.selection.value.check;
+    const selection = feedback.selection.value.roll;
     // Render selected choice to selection div
     document.querySelector(".selection").innerHTML = selection;
     // Clear Input
