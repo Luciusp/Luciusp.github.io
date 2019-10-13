@@ -1,9 +1,23 @@
 // autoComplete.js on type event emitter
 document.querySelector("#autoComplete").addEventListener("autoComplete", function (event) {
-  console.log(event.detail);
-  console.log(autoCompletejs);
+  if(event.detail.results != null && event.detail.results.length > 0)
+  {
+    var htmlString = "--------------------------------";
+    event.detail.results.forEach(function(element) {
+      Object.keys(element.value).forEach(function(key) {
+        htmlString += "<br>" + key + " : " + element.value[key];
+      });
+
+      htmlString += "<br> -------------------------------------- <br>";
+    });
+    document.querySelector(".selection").innerHTML = htmlString;
+  }
+  else {
+    document.querySelector(".selection").innerHTML = "";
+  }
 });
 
+v//ar test = '[{"Level":0,"Name":"Read Magic","Action":"Standard","School":"Divination","Range":"Personal","Targets":"You","Function":"Know Things"},{"Level":0,"Name":"Ray of Frost","Action":"Standard","School":"Evocation [Cold]","Range":"Close","Targets":1,"Function":"Do Damage"},{"Level":0,"Name":"Drench","Action":"Standard","School":"Conjuration (Creation) [Water]","Range":"Close","Targets":1,"Function":"Utility"},{"Level":0,"Name":"Light","Action":"Standard","School":"Evocation [Light]","Range":"Touch","Targets":1,"Function":"Environment"},{"Level":0,"Name":"Detect Magic","Action":"Standard","School":"Divination","Range":"Emanation","Targets":"AoE","Function":"Know Things"},{"Level":0,"Name":"Mending","Action":"Standard","School":"Transmutation","Range":"Other","Targets":1,"Function":"Utility"},{"Level":0,"Name":"Message","Action":"Standard","School":"Transmutation [Language-Dependent]","Range":"Medium","Targets":1,"Function":"Utility"},{"Level":1,"Name":"Endure Cold","Action":"Standard","School":"Abjuaration","Range":"Touch","Targets":1,"Function":"Environment"},{"Level":1,"Name":"Frostbite","Action":"Standard","School":"Transmutation [Cold]","Range":"Touch","Targets":"1/level","Function":"Do Damage"},{"Level":1,"Name":"Benign Transposition","Action":"Standard","School":"Conjuration (Teleportation)","Range":"Medium","Targets":2,"Function":"Move Things"},{"Level":1,"Name":"Freezing Hands","Action":"Standard","School":"Evocation [Cold]","Range":"Emanation","Targets":"AoE","Function":"Do Damage"},{"Level":1,"Name":"Windy Escape","Action":"Immediate","School":"Transmutation [Air]","Range":"Personal","Targets":"You","Function":"Defensive"},{"Level":1,"Name":"Hydraulic Push","Action":"Standard","School":"Evocation [Water]","Range":"Close","Targets":1,"Function":"Move Things"},{"Level":1,"Name":"Identify","Action":"Standard","School":"Divination","Range":"Emanation","Targets":"AoE","Function":"Know Things"},{"Level":1,"Name":"Silent Image","Action":"Standard","School":"Illusion (Figment)","Range":"Long","Targets":"AoE","Function":"Manipulate Enemies"},{"Level":1,"Name":"Command","Action":"Standard","School":"Enchantment (compulsion) [Language-Dependent, Mind-Affecting]","Range":"Close","Targets":1,"Function":"Manipulate Enemies"},{"Level":1,"Name":"Forced Quiet","Action":"Standard","School":"Transmutation","Range":"Medium","Targets":1,"Function":"Utility"},{"Level":1,"Name":"Dispelling Touch","Action":"Standard","School":"Abjuaration","Range":"Touch","Targets":1,"Function":"Manipulate Magic"},{"Level":1,"Name":"Mage Armor","Action":"Standard","School":"Conjuration (Creation) [Force]","Range":"Touch","Targets":1,"Function":"Defensive"},{"Level":1,"Name":"Scatterspray","Action":"Standard","School":"Transmutation","Range":"Close","Targets":"AoE","Function":"Do Damage"},{"Level":1,"Name":"Unprepared Combatant","Action":"Standard","School":"Enchantment (compulsion) [Language-Dependent, Mind-Affecting]","Range":"Close","Targets":1,"Function":"Manipulate Enemies"},{"Level":1,"Name":"Magic Missile","Action":"Standard","School":"Evocation [Force]","Range":"Medium","Targets":"Unique","Function":"Do Damage"},{"Level":2,"Name":"Frostburn","Action":"Standard","School":"Evocation [Cold]","Range":"Close","Targets":1,"Function":"Do Damage"},{"Level":2,"Name":"Find Traps","Action":"Standard","School":"Divination","Range":"Personal","Targets":"You","Function":"Know Things"},{"Level":2,"Name":"Whelming Blast","Action":"Standard","School":"Enchantment [Mind-Affecting]","Range":"Emanation","Targets":"AoE","Function":"Do Damage"},{"Level":2,"Name":"Gusting Sphere","Action":"Standard","School":"Evocation [Air]","Range":"Medium","Targets":"Unique","Function":"Move Things"},{"Level":2,"Name":"Winter’s Grasp","Action":"Standard","School":"Conjuration (Creation) [Cold]","Range":"Medium","Targets":"AoE","Function":"Manipulate Enemies"},{"Level":2,"Name":"Summon Monster 2","Action":"1 round","School":"Conjuration (Summoning) [See Text]","Range":"Close","Targets":"Unique","Function":"Unique"}]';
 // The autoComplete.js Engine instance creator
 const autoCompletejs = new autoComplete({
   data: {
@@ -13,10 +27,12 @@ const autoCompletejs = new autoComplete({
       // Fetch External Data Source
       const source = await fetch("./db/generic.json");
       const data = await source.json();
+
+      //const data = JSON.parse(test);
       // Returns Fetched data
       return data;
     },
-    key: ["Function", "Action"],
+    key: ["Function", "Action", "Name"],
   },
   sort: function (a, b) {
     if (a.match < b.match) {
@@ -35,9 +51,9 @@ const autoCompletejs = new autoComplete({
   debounce: 0,
   searchEngine: "strict",
   highlight: true,
-  maxResults: 10,
+  maxResults: 100,
   resultsList: {
-    render: true,
+    render: false,
     container: function (source) {
       source.setAttribute("id", "autoComplete_results_list");
     },
@@ -59,15 +75,9 @@ const autoCompletejs = new autoComplete({
     document.querySelector("#autoComplete_results_list").appendChild(result);
   },
   onSelection: function (feedback) {
-    const selection = feedback.selection.value.action;
-    // Render selected choice to selection div
-    document.querySelector(".selection").innerHTML = selection;
     // Clear Input
     document.querySelector("#autoComplete").value = "";
     // Change placeholder with the selected value
-    document.querySelector("#autoComplete").setAttribute("placeholder", selection);
-    // Concole log autoComplete data feedback
-    console.log(feedback);
   },
 });
 
@@ -75,24 +85,6 @@ const autoCompletejs = new autoComplete({
 window.addEventListener("load", function () {
   document.querySelector("#autoComplete").classList.add("out");
   // document.querySelector("#autoComplete_results_list").style.display = "none";
-});
-
-// Toggle Search Engine Type/Mode
-document.querySelector(".toggeler").addEventListener("click", function () {
-  // Holdes the toggle buttin alignment
-  const toggele = document.querySelector(".toggele").style.justifyContent;
-
-  if (toggele === "flex-start" || toggele === "") {
-    // Set Search Engine mode to Loose
-    document.querySelector(".toggele").style.justifyContent = "flex-end";
-    document.querySelector(".toggeler").innerHTML = "Loose";
-    autoCompletejs.searchEngine = "loose";
-  } else {
-    // Set Search Engine mode to Strict
-    document.querySelector(".toggele").style.justifyContent = "flex-start";
-    document.querySelector(".toggeler").innerHTML = "Strict";
-    autoCompletejs.searchEngine = "strict";
-  }
 });
 
 // Toggle results list and other elements
@@ -118,51 +110,6 @@ const action = function (action) {
   }
 };
 
-// Toggle event for search input
-// showing & hidding results list onfocus / blur
-["focus", "blur", "mousedown", "keydown"].forEach(function (eventType) {
-  const input = document.querySelector("#autoComplete");
-  const resultsList = document.querySelector("#autoComplete_results_list");
-
-  document.querySelector("#autoComplete").addEventListener(eventType, function (event) {
-    // Hide results list & show other elemennts
-    if (eventType === "blur") {
-      action("dim");
-    } else if (eventType === "focus") {
-      // Show results list & hide other elemennts
-      action("light");
-    }
-  });
-
-  // Hide Results list when not used
-  document.addEventListener(eventType, function (event) {
-    const current = event.target;
-    if (
-      current === input ||
-      current === resultsList ||
-      input.contains(current) ||
-      resultsList.contains(current)
-    ) {
-      resultsList.style.display = "block";
-    } else {
-      resultsList.style.display = "none";
-    }
-  });
-});
-
-// Toggle Input Classes on results list focus to keep style
-["focusin", "focusout", "keydown"].forEach(function (eventType) {
-  document.querySelector("#autoComplete_results_list").addEventListener(eventType, function (event) {
-    if (eventType === "focusin") {
-      if (event.target && event.target.nodeName === "LI") {
-        action("light");
-        document.querySelector("#autoComplete").classList.remove("out");
-        document.querySelector("#autoComplete").classList.add("in");
-      }
-    } else if (eventType === "focusout" || event.keyCode === 13) {
-      action("dim");
-      document.querySelector("#autoComplete").classList.remove("in");
-      document.querySelector("#autoComplete").classList.add("out");
-    }
-  });
-});
+function generateAbilityDiv(object) {
+  console.log(test);
+}

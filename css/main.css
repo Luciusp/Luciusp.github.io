@@ -13,7 +13,7 @@ body {
     padding: 0;
 }
 
-.contaier {
+.container {
     width: 100vw;
     height: 100vh;
 }
@@ -138,7 +138,7 @@ h4::selection {
 }
 
 .selection {
-    margin-top: 25vh;
+    margin-top: 0vh;
     font-size: 2rem;
     font-weight: bold;
     color: #ffc6c6;
