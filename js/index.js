@@ -59,7 +59,7 @@ const autoCompletejs = new autoComplete({
     document.querySelector("#autoComplete_results_list").appendChild(result);
   },
   onSelection: function (feedback) {
-    const selection = feedback.selection.value.roll;
+    const selection = feedback.selection.value.action;
     // Render selected choice to selection div
     document.querySelector(".selection").innerHTML = selection;
     // Clear Input
