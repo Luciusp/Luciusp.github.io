@@ -6,7 +6,7 @@ document.querySelector("#autoComplete").addEventListener("autoComplete", functio
     event.detail.results.forEach(function(element) {
       Object.keys(element.value).forEach(function(key) {
         if (key == "Name") {
-          htmlString += "<br>" + key + " : <a href=https://skies-of-glass.obsidianportal.com/wikis/"+element.value[key].replace(" ", "-")+">" + element.value[key] + "</a>";
+          htmlString += "<br>" + key + " : <a href=https://skies-of-glass.obsidianportal.com/wikis/"+element.value[key].replace(" ", "-")+"target=_blank>" + element.value[key] + "</a>";
         }
         else {
           htmlString += "<br>" + key + " : " + element.value[key];
