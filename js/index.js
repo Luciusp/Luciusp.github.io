@@ -5,7 +5,12 @@ document.querySelector("#autoComplete").addEventListener("autoComplete", functio
     var htmlString = "--------------------------------";
     event.detail.results.forEach(function(element) {
       Object.keys(element.value).forEach(function(key) {
-        htmlString += "<br>" + key + " : " + element.value[key];
+        if (key == "Name") {
+          htmlString += "<br>" + key + " : <a href=https://skies-of-glass.obsidianportal.com/wikis/"+element.value[key].replace(" ", "-")+">" + element.value[key] + "</a>";
+        }
+        else {
+          htmlString += "<br>" + key + " : " + element.value[key];
+        }
       });
 
       htmlString += "<br> -------------------------------------- <br>";
