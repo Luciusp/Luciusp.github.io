@@ -16,7 +16,7 @@ const autoCompletejs = new autoComplete({
       // Returns Fetched data
       return data;
     },
-    key: ["check", "roll"],
+    key: ["Function", "Action"],
   },
   sort: function (a, b) {
     if (a.match < b.match) {
